@@ -1,10 +1,11 @@
 /* Método Escrita Invisível — comportamento mínimo.
    A página é integralmente funcional sem este arquivo. */
 
-/* PONTO DE TROCA DO CHECKOUT
-   Substitua o valor por uma URL real e descomente a linha de aplicação
-   dentro de applyCheckoutUrl() para redirecionar todos os CTAs de uma vez. */
-var CHECKOUT_URL = '#investimento';
+/* CHECKOUT
+   A URL fica no href dos 10 CTAs, direto no HTML — de propósito. Assim o botão
+   funciona mesmo se este arquivo falhar ou demorar a carregar, que é a pior
+   falha possível numa página de venda. Para trocar: buscar e substituir
+   "pay.hotmart.com/..." no index.html (10 ocorrências, todas idênticas). */
 
 /* marca que há JS antes da primeira pintura: os estados iniciais de
    animação só existem sob .js, então nada some com JS desativado */
@@ -19,13 +20,6 @@ document.documentElement.classList.add('js');
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
-  }
-
-  /* --- CTAs ------------------------------------------------------------- */
-
-  function applyCheckoutUrl() {
-    if (CHECKOUT_URL === '#investimento') return;
-    // document.querySelectorAll('[data-cta]').forEach(function (a) { a.href = CHECKOUT_URL; });
   }
 
   /* --- 1 · revelação em tinta invisível (hero, uma vez) ------------------ */
@@ -154,7 +148,6 @@ document.documentElement.classList.add('js');
   }
 
   ready(function () {
-    applyCheckoutUrl();
     inkReveal();
     topbar();
     reveals();
