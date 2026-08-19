@@ -80,7 +80,6 @@ body {
   font-family: var(--ff-read);
   font-size: var(--fs-body);
   line-height: 1.7;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -490,7 +489,39 @@ section[id] { scroll-margin-top: 76px; }
   background: var(--surface);
 }
 .videos__frame > img,
-.videos__frame > iframe { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.videos__frame > iframe,
+.videos__frame > .short { width: 100%; height: 100%; border: 0; }
+.videos__frame > img,
+.videos__frame > iframe { object-fit: cover; }
+
+/* fachada: miniatura local + botão de play. O player só entra no clique. */
+.short { position: relative; display: block; text-decoration: none; }
+.short picture, .short img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.short__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(10, 23, 29, 0.72);
+  border: 1px solid rgba(239, 231, 218, 0.45);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+.short__play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-left: 16px solid var(--paper);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transform: translateX(3px);
+}
+.short:hover .short__play { transform: scale(1.08); background: var(--revision); }
+.short:focus-visible { outline: 3px solid var(--revision); outline-offset: 3px; }
 .videos__cta { grid-column: 1 / 13; }
 
 /* 08 · o que você leva */
@@ -717,10 +748,12 @@ section[id] { scroll-margin-top: 76px; }
     grid-column: 1 / -1;
     grid-row: auto;
   }
+  /* no mobile a oferta vem ANTES do retrato: com a foto em 4:5 ocupando a
+     largura toda, o CTA caía ~500px abaixo da dobra */
   .hero__logo     { order: 1; }
   .hero__title    { order: 2; }
-  .hero__portrait { order: 3; }
-  .hero__aside    { order: 4; }
+  .hero__aside    { order: 3; }
+  .hero__portrait { order: 4; }
 
   .teacher__title    { order: 1; }
   .teacher__portrait { order: 2; }
@@ -741,6 +774,8 @@ section[id] { scroll-margin-top: 76px; }
   .topbar__logo { display: none; }
   .topbar__inner { padding: 0.6rem var(--gutter); }
   .topbar .btn { width: 100%; }
+  /* estado oculto desce, não sobe (a barra vive no rodapé aqui).
+     Quem decide a visibilidade é o .is-visible, ligado ao CTA da hero. */
   .js .topbar { transform: translateY(100%); }
 }
 
@@ -776,7 +811,8 @@ section[id] { scroll-margin-top: 76px; }
 }
 
 @media (max-width: 520px) {
-  .btn { display: flex; width: 100%; padding-inline: 1.15rem; letter-spacing: 0.02em; }
+  /* 14px é o que faz "QUERO GARANTIR MINHA VAGA" caber numa linha em 360px */
+  .btn { display: flex; width: 100%; padding-inline: 1.15rem; font-size: 0.875rem; letter-spacing: 0.02em; }
   /* três shorts lado a lado ficariam com menos de 100px aqui */
   .videos__frames { grid-template-columns: minmax(0, 1fr); }
 }

@@ -7,9 +7,8 @@
    falha possível numa página de venda. Para trocar: buscar e substituir
    "pay.hotmart.com/..." no index.html (10 ocorrências, todas idênticas). */
 
-/* marca que há JS antes da primeira pintura: os estados iniciais de
-   animação só existem sob .js, então nada some com JS desativado */
-document.documentElement.classList.add('js');
+/* A classe .js é adicionada por um script inline no <head>, antes da primeira
+   pintura. Este arquivo é carregado com defer e não bloqueia a renderização. */
 
 (function () {
   'use strict';
@@ -72,10 +71,23 @@ document.documentElement.classList.add('js');
 
   /* --- 2 · header fixo --------------------------------------------------- */
 
+  /* A barra aparece quando o CTA da hero sai de vista — nunca por um limiar
+     em pixels. Assim nunca há dois botões iguais na tela ao mesmo tempo, e a
+     regra se adapta sozinha a qualquer altura de viewport. */
   function topbar() {
     var bar = document.getElementById('topbar');
     if (!bar) return;
 
+    var anchor = document.querySelector('.hero__act');
+
+    if (anchor && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        bar.classList.toggle('is-visible', !entries[0].isIntersecting);
+      }, { threshold: 0 }).observe(anchor);
+      return;
+    }
+
+    /* fallback para navegadores sem IntersectionObserver */
     var shown = null;
     var ticking = false;
 
@@ -125,7 +137,31 @@ document.documentElement.classList.add('js');
     for (var k = 0; k < items.length; k++) observer.observe(items[k]);
   }
 
-  /* --- 4 · acordeão do FAQ ---------------------------------------------- */
+  /* --- 4 · fachadas de vídeo -------------------------------------------- */
+
+  /* Sem JS, cada fachada é só um link que abre o vídeo no YouTube. Com JS,
+     o clique troca a miniatura pelo player — nenhum byte do YouTube antes disso. */
+  function shorts() {
+    var fachadas = document.querySelectorAll('.short[data-yt]');
+
+    Array.prototype.forEach.call(fachadas, function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var img = a.querySelector('img');
+        var frame = document.createElement('iframe');
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + a.getAttribute('data-yt') +
+                    '?autoplay=1&rel=0';
+        frame.title = img ? img.alt : a.href;
+        frame.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+        frame.referrerPolicy = 'strict-origin-when-cross-origin';
+        frame.setAttribute('allowfullscreen', '');
+        a.parentNode.replaceChild(frame, a);
+        frame.focus();
+      });
+    });
+  }
+
+  /* --- 5 · acordeão do FAQ ---------------------------------------------- */
 
   function faq() {
     var buttons = document.querySelectorAll('.qa__btn');
@@ -151,6 +187,7 @@ document.documentElement.classList.add('js');
     inkReveal();
     topbar();
     reveals();
+    shorts();
     faq();
   });
 })();

@@ -5,11 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Método Escrita Invisível — Ariane Abdallah</title>
 <meta name="description" content="Curso de ghostwriting de livros com Ariane Abdallah: método testado em mais de 30 livros publicados, incluindo um vencedor do Prêmio Jabuti 2025.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&amp;family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&amp;display=swap">
+<!-- type= faz o preload ser ignorado por quem não suporta WebP, que então baixa
+     o JPEG do <picture> normalmente — sem download duplo em nenhum dos casos -->
+<link rel="preload" as="image" href="assets/img/hero-ariane.webp" type="image/webp" fetchpriority="high">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/newsreader-300-normal.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/literata-400-normal.woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
-<script src="js/main.js"></script>
+<!-- marca .js antes da primeira pintura (evita piscar os estados de animação).
+     O resto do comportamento vem depois, sem bloquear a renderização. -->
+<script>document.documentElement.className+=" js"</script>
+<script src="js/main.js" defer></script>
 </head>
 <body>
 
@@ -35,7 +41,10 @@
       <p class="hero__note">Vagas limitadas nesta turma · Garantia de 7 dias + garantia condicional de 1 ano</p>
     </div>
     <figure class="hero__portrait">
-      <img src="assets/img/hero-ariane.jpg" alt="Retrato de Ariane Abdallah diante de um fundo escuro com letras" width="879" height="1099" fetchpriority="high">
+      <picture>
+        <source srcset="assets/img/hero-ariane.webp" type="image/webp">
+        <img src="assets/img/hero-ariane.jpg" alt="Retrato de Ariane Abdallah diante de um fundo escuro com letras" width="879" height="1099" fetchpriority="high" decoding="async">
+      </picture>
     </figure>
   </div>
 </section>
@@ -174,7 +183,10 @@
     </figure>
     <p class="teacher__cta reveal"><a class="btn" href="https://pay.hotmart.com/Q101345708N?checkoutMode=10&amp;bid=1787144142680" data-cta>QUERO APRENDER COM A ARIANE <span class="btn__arrow">→</span></a></p>
     <figure class="teacher__portrait reveal">
-      <img src="assets/img/ariane-retrato.jpg" alt="Retrato de Ariane Abdallah sentada" width="493" height="657" loading="lazy">
+      <picture>
+        <source srcset="assets/img/ariane-retrato.webp" type="image/webp">
+        <img src="assets/img/ariane-retrato.jpg" alt="Retrato de Ariane Abdallah sentada" width="493" height="657" loading="lazy" decoding="async">
+      </picture>
     </figure>
   </div>
 </section>
@@ -183,17 +195,36 @@
 <section class="band ink-deep" id="depoimentos-video">
   <div class="wrap videos">
     <h2 class="h2 videos__title reveal">Depoimentos</h2>
-    <!-- Para trocar/adicionar um depoimento, troque só o ID no final da URL do embed.
-         O container trava o aspect-ratio 16:9; o grid se ajusta sozinho ao número de itens. -->
+    <!-- Fachada: a miniatura é local e o player do YouTube só carrega no clique.
+         Sem JS, o link abre o vídeo no YouTube. Para trocar, mude o data-yt/href
+         e a miniatura correspondente em assets/img/. -->
     <div class="videos__frames">
       <div class="videos__frame reveal">
-        <iframe src="https://www.youtube-nocookie.com/embed/jzPI17zExt4" title="Depoimento em vídeo 1" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <a class="short" href="https://youtu.be/jzPI17zExt4" data-yt="jzPI17zExt4">
+          <picture>
+            <source srcset="assets/img/depoimento-1.webp" type="image/webp">
+            <img src="assets/img/depoimento-1.jpg" alt="Depoimento em vídeo 1" width="405" height="720" loading="lazy" decoding="async">
+          </picture>
+          <span class="short__play" aria-hidden="true"></span>
+        </a>
       </div>
       <div class="videos__frame reveal">
-        <iframe src="https://www.youtube-nocookie.com/embed/W09EwLm90vM" title="Depoimento em vídeo 2" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <a class="short" href="https://youtu.be/W09EwLm90vM" data-yt="W09EwLm90vM">
+          <picture>
+            <source srcset="assets/img/depoimento-2.webp" type="image/webp">
+            <img src="assets/img/depoimento-2.jpg" alt="Depoimento em vídeo 2" width="405" height="720" loading="lazy" decoding="async">
+          </picture>
+          <span class="short__play" aria-hidden="true"></span>
+        </a>
       </div>
       <div class="videos__frame reveal">
-        <iframe src="https://www.youtube-nocookie.com/embed/5c_X2xVEHcE" title="Depoimento em vídeo 3" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <a class="short" href="https://youtu.be/5c_X2xVEHcE" data-yt="5c_X2xVEHcE">
+          <picture>
+            <source srcset="assets/img/depoimento-3.webp" type="image/webp">
+            <img src="assets/img/depoimento-3.jpg" alt="Depoimento em vídeo 3" width="405" height="720" loading="lazy" decoding="async">
+          </picture>
+          <span class="short__play" aria-hidden="true"></span>
+        </a>
       </div>
     </div>
     <p class="videos__cta reveal"><a class="btn" href="https://pay.hotmart.com/Q101345708N?checkoutMode=10&amp;bid=1787144142680" data-cta>QUERO COMEÇAR MEU CAMINHO <span class="btn__arrow">→</span></a></p>
